@@ -1,0 +1,183 @@
+﻿@using NguyenDuyQuang.Models
+@model IEnumerable<TheLoai>
+@{
+    ViewBag.Title = "Quản Lý Thể Loại";
+    Layout = "~/Areas/Common/Views/Shared/_LayoutCommon.cshtml";
+}
+
+<style>
+    /* Giao diện Bảng Dark Theme cao cấp */
+    .admin-table-container {
+        background-color: #1e293b; /* Nền card xanh navy nhạt */
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    #customers {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        color: #f8fafc;
+    }
+
+    #customers th {
+        background-color: #0f172a; /* Nền header xanh navy đậm */
+        color: #fbbf24;
+        padding: 16px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #fbbf24;
+    }
+
+    #customers th:first-child { border-top-left-radius: 10px; }
+    #customers th:last-child { border-top-right-radius: 10px; }
+
+    #customers td {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+    }
+
+    #customers tr {
+        transition: all 0.3s ease;
+    }
+
+    #customers tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Nút Thêm Mới */
+    .btn-add-new {
+        display: inline-block;
+        background-color: #fbbf24;
+        color: #0f172a;
+        padding: 10px 25px;
+        border-radius: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        margin-bottom: 25px;
+    }
+
+    .btn-add-new:hover {
+        background-color: #f59e0b;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        text-decoration: none;
+    }
+
+    /* Link Thể Loại */
+    .category-link {
+        color: #f8fafc;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+    }
+
+    .category-link:hover {
+        color: #fbbf24;
+    }
+
+    /* Badge Số lượng */
+    .count-badge {
+        background-color: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    /* Nút Thao Tác */
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        margin-right: 5px;
+    }
+
+    .btn-edit {
+        background-color: rgba(56, 189, 248, 0.15);
+        color: #38bdf8; /* Màu xanh biển nhạt */
+        border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .btn-edit:hover {
+        background-color: #38bdf8;
+        color: #0f172a;
+    }
+
+    .btn-delete {
+        background-color: rgba(239, 68, 68, 0.15);
+        color: #fca5a5; /* Màu đỏ nhạt */
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .btn-delete:hover {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    /* Tiêu đề phần quản lý */
+    .section-heading h2 {
+        color: #fbbf24;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+    .section-heading span {
+        color: #cbd5e1;
+        font-size: 1.05rem;
+    }
+</style>
+
+<div class="contact-us mt-5 pt-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading mb-4">
+                    <h2>Danh sách thể loại</h2>
+                    <span class="d-block mb-4">Tất cả thể loại hiện có trong hệ thống</span>
+                    <a href="/Common/TheLoai/ThemMoiTheLoai" class="btn-add-new"><i class="fa fa-plus me-2"></i> Thêm mới</a>
+                </div>
+                
+                <div class="admin-table-container">
+                    <table id="customers">
+                        <thead>
+                            <tr>
+                                <th>Thể Loại</th>
+                                <th>SL Bài Viết</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/Common/BaiViet/DanhSachBaiViet?iMaTheLoai=@item.MaTheLoai" target="_blank" class="category-link">@item.TenTheLoai</a>
+                                    </td>
+                                    <td>
+                                        <span class="count-badge">@item.SoLuongBaiViet</span>
+                                    </td>
+                                    <td>
+                                        <a href="/Common/TheLoai/CapNhatTheLoai?iMaTheLoai=@item.MaTheLoai" class="action-btn btn-edit"><i class="fa fa-pencil"></i> Cập Nhật</a>
+                                        <a href="/Common/TheLoai/XoaTheLoai?iMaTheLoai=@item.MaTheLoai" class="action-btn btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa thể loại này không?');"><i class="fa fa-trash"></i> Xóa</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

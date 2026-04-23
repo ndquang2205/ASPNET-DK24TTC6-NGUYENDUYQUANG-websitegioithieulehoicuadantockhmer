@@ -1,0 +1,190 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/Assets/Login/fonts/icomoon/style.css">
+    
+    <link rel="stylesheet" href="~/Assets/Login/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="~/Assets/KhachHang/img/logo/VT2.png">
+
+    <title>Trang Đăng Nhập - Lễ Hội Khmer</title>
+
+    <style>
+        /* Tùy chỉnh giao diện Dark Theme & Glassmorphism */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a; /* Nền dự phòng */
+        }
+
+        /* Lớp nền toàn màn hình */
+        .login-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/Assets/images/AnhDuLich.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Lớp phủ tối màu lên ảnh nền để dễ đọc chữ */
+        .bg-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.7); /* Xanh navy đậm trong suốt */
+            z-index: 2;
+        }
+
+        /* Form Đăng Nhập dạng kính mờ */
+        .glass-login-box {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            color: #f8fafc;
+        }
+
+        .glass-login-box h3 {
+            color: #fbbf24;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Tùy chỉnh Ô nhập liệu */
+        .form-control {
+            background: rgba(15, 23, 42, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #f8fafc !important;
+            border-radius: 10px;
+            padding: 12px 15px;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-control:focus {
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 0 0.2rem rgba(251, 191, 36, 0.25) !important;
+            background: rgba(15, 23, 42, 0.8) !important;
+        }
+
+        /* Nút Đăng Nhập */
+        .btn-primary {
+            background-color: #fbbf24 !important;
+            border: none !important;
+            color: #0f172a !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 14px;
+            border-radius: 10px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #f59e0b !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Text Link */
+        .forgot-pass {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        
+        .forgot-pass:hover {
+            color: #fbbf24;
+            text-decoration: none;
+        }
+
+        /* Checkbox Tùy chỉnh */
+        .control--checkbox {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-bg"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="glass-login-box">
+            <div class="text-center">
+                <h3>Lễ Hội KHMER</h3>
+            </div>
+            
+            @using (Ajax.BeginForm("DangNhap", "DangNhap", new AjaxOptions { HttpMethod = "GET", InsertionMode = InsertionMode.Replace, UpdateTargetId = "ThongBao" }))
+            {
+                <div class="form-group mb-4">
+                    <label for="username">Tên Đăng Nhập</label>
+                    <input type="text" class="form-control" placeholder="Nhập tên tài khoản..." name="txtTaiKhoan" required>
+                </div>
+                
+                <div class="form-group mb-4">
+                    <label for="password">Mật Khẩu</label>
+                    <input type="password" class="form-control" placeholder="Nhập mật khẩu..." name="txtMatKhau" required>
+                </div>
+                
+                <div class="ThongBao" id="ThongBao">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, null, new { @class = "alert alert-danger p-2 fs-6" })
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+                    <div class="form-check p-0">
+                        <label class="control control--checkbox m-0 d-flex align-items-center">
+                            <input type="checkbox" checked="checked" class="mr-2" style="width: 16px; height: 16px; accent-color: #fbbf24;" />
+                            <span class="caption">Nhớ mật khẩu</span>
+                        </label>
+                    </div>
+                    <div>
+                        <a href="#" class="forgot-pass">Quên mật khẩu?</a>
+                        <span class="text-muted mx-1">|</span>
+<a class="forgot-pass" href="#" style="color: #fbbf24;">Đăng ký</a>
+
+<a class="forgot-pass" href="https://localhost:44330/Common/DangNhap/DangKy" style="color: #fbbf24;">Đăng ký</a>                    </div>
+                </div>
+                
+                <input type="submit" value="Đăng Nhập" class="btn btn-block btn-primary">
+            }
+        </div>
+    </div>
+
+    <script src="~/Assets/Login/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Assets/Login/js/popper.min.js"></script>
+    <script src="~/Assets/Login/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+</body>
+</html>

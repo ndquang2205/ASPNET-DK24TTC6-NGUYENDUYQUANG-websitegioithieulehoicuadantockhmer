@@ -1,0 +1,362 @@
+﻿@using NguyenDuyQuang.Models
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Khám phá lễ hội văn hóa truyền thống của người Khmer Nam Bộ">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>@ViewBag.title</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Assets/css/font-awesome.css">
+    <link rel="stylesheet" href="~/Assets/css/templatemo-hexashop.css">
+    <link rel="stylesheet" href="~/Assets/css/owl-carousel.css">
+    <link rel="stylesheet" href="~/Assets/css/lightbox.css">
+    <script src="~/Assets/ckeditor/ckeditor.js"></script>
+
+    <style>
+        /* HEADER - KÍNH MỜ (Glassmorphism) */
+        .header-area.header-sticky {
+            background-color: rgba(15, 23, 42, 0.85) !important; /* Xanh navy tối mờ */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Định dạng link trên thanh menu */
+        .header-area .main-nav .nav li a {
+            color: #f8fafc !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        /* Hiệu ứng gạch chân chạy ra khi hover */
+        .header-area .main-nav .nav li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 50%;
+            background-color: #fbbf24;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateX(-50%);
+        }
+        .header-area .main-nav .nav li:hover a::after,
+        .header-area .main-nav .nav li a.active::after {
+            width: 80%;
+        }
+
+        .header-area .main-nav .nav li:hover a,
+        .header-area .main-nav .nav li a.active {
+            color: #fbbf24 !important;
+        }
+
+        /* Định dạng Menu con (Submenu) */
+        .header-area .main-nav .nav li.submenu ul {
+            background-color: #1e293b !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 10px 0;
+            top: 100%;
+            transition: all 0.3s ease;
+        }
+        .header-area .main-nav .nav li.submenu ul li a {
+            color: #cbd5e1 !important;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: none;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+        .header-area .main-nav .nav li.submenu ul li a::after {
+            display: none; /* Tắt gạch chân ở menu con */
+        }
+        .header-area .main-nav .nav li.submenu ul li a:hover {
+            background-color: rgba(251, 191, 36, 0.1);
+            color: #fbbf24 !important;
+            padding-left: 28px; /* Chữ trượt nhẹ sang phải */
+        }
+
+        /* FOOTER CAO CẤP */
+        footer {
+            background-color: #0b1120 !important; /* Tối hơn nền body một chút để tạo độ sâu */
+            color: #cbd5e1;
+            padding-top: 70px;
+            padding-bottom: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 0;
+        }
+        footer h4 {
+            color: #f8fafc;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        footer h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #fbbf24;
+            border-radius: 2px;
+        }
+        footer ul {
+            padding-left: 0;
+        }
+        footer ul li {
+            margin-bottom: 15px;
+            list-style: none;
+        }
+        footer ul li a {
+            color: #94a3b8;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        footer ul li a:hover {
+            color: #fbbf24;
+            padding-left: 8px; /* Hover thụt lề nhẹ */
+        }
+
+        /* Phần bản quyền & mạng xã hội dưới cùng */
+        .under-footer {
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .under-footer p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .under-footer ul {
+            display: flex;
+            gap: 15px;
+            margin: 0;
+        }
+        .under-footer ul li {
+            margin: 0;
+        }
+        .under-footer ul li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.05);
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        .under-footer ul li a:hover {
+            background-color: #fbbf24;
+            color: #0b1120;
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Custom cho màn hình nhỏ */
+        @@media (max-width: 991px) {
+            .header-area .main-nav .nav {
+                background-color: #1e293b !important;
+            }
+            .header-area .main-nav .nav li a {
+                color: #f8fafc !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="preloader">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <div class="logo" style="display: flex; align-items: center; cursor: pointer; padding-top: 25px;">
+                            <span style="color: #fbbf24; font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+                                Nguyễn Duy Quang
+                            </span>
+                        </div>
+                        
+                       @using NguyenDuyQuang.Models;
+
+<ul class="nav">
+    <li class="scroll-to-section"><a href="/Common/Home/Index" class="active">Trang Chủ</a></li>
+    
+    <li class="submenu">
+        <a href="javascript:;">LỄ HỘI</a>
+        <ul>
+            @Html.Action("TheLoai_Par", "Partialview", new { iMaDanhMuc = 2 })
+        </ul>
+    </li>
+    
+    <li class="submenu">
+        <a href="javascript:;">VĂN HÓA</a>
+        <ul>
+            @Html.Action("TheLoai_Par", "Partialview", new { iMaDanhMuc = 3 })
+        </ul>
+    </li>
+    
+    <li class="submenu">
+        <a href="javascript:;">TIN TỨC</a>
+        <ul>
+            @Html.Action("TheLoai_Par", "Partialview", new { iMaDanhMuc = 4 })
+        </ul>
+    </li>
+    
+    <li class="submenu">
+        <a href="javascript:;">THÔNG TIN</a>
+        <ul>
+            @Html.Action("TheLoai_Par", "Partialview", new { iMaDanhMuc = 5 })
+        </ul>
+    </li>
+
+    @* PHẦN XỬ LÝ ĐĂNG NHẬP / TÊN NGƯỜI DÙNG *@
+    
+    @if (Session["TaiKhoanNV"] == null && Session["TaiKhoanKH"] == null)
+    {
+        <li class="scroll-to-section">
+            <a href="/Common/DangNhap/DangNhap"><i class="fa fa-sign-in"></i> Đăng Nhập</a>
+        </li>
+    }
+    else if (Session["TaiKhoanNV"] != null)
+    {
+        var tkAdmin = (TaiKhoan)Session["TaiKhoanNV"];
+        <li class="submenu">
+            <a href="javascript:;" style="color: #fbbf24 !important;">
+                <i class="fa fa-user-circle"></i> Quản Trị
+            </a>
+            <ul>
+                <li><a href="#" style="color: #fbbf24 !important; font-weight: bold;">Chào, @tkAdmin.HoTen</a></li>
+                <li><a href="/Common/TheLoai/ListTheLoai">Quản Lý Thể Loại</a></li>
+                <li><a href="/Common/BaiViet/BaiVietAll">Quản Lý Bài Viết</a></li>
+                <li><hr style="margin: 5px 0; border-color: rgba(255,255,255,0.1);" /></li>
+                <li><a href="/Common/DangNhap/DangXuatAdmin" onclick="return confirm('Bạn muốn đăng xuất?')">Đăng Xuất</a></li>
+            </ul>
+        </li>
+    }
+    else if (Session["TaiKhoanKH"] != null)
+    {
+        var tkKhach = (TaiKhoan)Session["TaiKhoanKH"];
+        <li class="submenu">
+            <a href="javascript:;" style="color: #fbbf24 !important;">
+                <i class="fa fa-user"></i> @tkKhach.HoTen
+            </a>
+            <ul>
+
+                <li><hr style="margin: 5px 0; border-color: rgba(255,255,255,0.1);" /></li>
+                <li><a href="/Common/DangNhap/DangXuatKH" onclick="return confirm('Bạn muốn đăng xuất?')">Đăng Xuất</a></li>
+            </ul>
+        </li>
+    }
+</ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    @RenderBody()
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="first-item">
+                        <div class="logo mb-4" style="display: flex; align-items: center; cursor: pointer;">
+                            <span style="color: #fbbf24; font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+                                Nguyễn Duy Quang
+                            </span>
+                        </div>
+                        <ul class="list-unstyled">
+                            <li><a href="#"><i class="fa fa-map-marker" style="width: 20px;"></i> Trang tin lễ hội Khmer Nam Bộ</a></li>
+                            <li><a href="#"><i class="fa fa-envelope" style="width: 20px;"></i> lehoikhmer@company.com</a></li>
+                            <li><a href="#"><i class="fa fa-phone" style="width: 20px;"></i> 0987654321</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-4 mb-4">
+                    <h4>Về Lễ Hội</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Lễ hội Ok Om Bok</a></li>
+                        <li><a href="#">Lễ hội Chol Chnam Thmay</a></li>
+                        <li><a href="#">Lễ Sene Dolta</a></li>
+                        <li><a href="#">Lễ hội Đua ghe ngo</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h4>Khám Phá Văn Hóa</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Kiến trúc chùa Khmer</a></li>
+                        <li><a href="#">Trang phục truyền thống</a></li>
+                        <li><a href="#">Nghệ thuật biểu diễn Rom Vong</a></li>
+                        <li><a href="#">Ẩm thực đặc sắc Nam Bộ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p>
+                            &copy; 2026 Website quảng bá văn hóa lễ hội Khmer. <br>
+                            Thiết kế & Phát triển: <span style="color: #fbbf24;">Nguyễn Duy Quang</span>
+                        </p>
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/Assets/js/jquery-2.1.0.min.js"></script>
+    <script src="~/Assets/js/popper.js"></script>
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+    <script src="~/Assets/js/owl-carousel.js"></script>
+    <script src="~/Assets/js/accordions.js"></script>
+    <script src="~/Assets/js/datepicker.js"></script>
+    <script src="~/Assets/js/scrollreveal.min.js"></script>
+    <script src="~/Assets/js/waypoints.min.js"></script>
+    <script src="~/Assets/js/jquery.counterup.min.js"></script>
+    <script src="~/Assets/js/imgfix.min.js"></script>
+    <script src="~/Assets/js/slick.js"></script>
+    <script src="~/Assets/js/lightbox.js"></script>
+    <script src="~/Assets/js/isotope.js"></script>
+    <script src="~/Assets/js/custom.js"></script>
+</body>
+</html>

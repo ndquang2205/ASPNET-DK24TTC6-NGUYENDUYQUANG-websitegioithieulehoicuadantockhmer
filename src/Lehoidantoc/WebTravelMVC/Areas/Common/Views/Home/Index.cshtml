@@ -1,0 +1,375 @@
+﻿@using NguyenDuyQuang.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Common/Views/Shared/_LayoutCommon.cshtml";
+}
+@{
+    IEnumerable<BaiViet> listBaiVietNoiBat = ViewBag.NoiBat as IEnumerable<BaiViet>;
+    IEnumerable<BaiViet> listBaiViet = ViewBag.DoanhNghiepvaLuHanh as IEnumerable<BaiViet>;
+}
+
+<style>
+    /* 1. TÔNG MÀU NỀN TỐI SANG TRỌNG (Không dùng đen tuyền) */
+    :root {
+        --bg-main: #0f172a; /* Nền tổng thể đậm */
+        --bg-card: #1e293b; /* Nền card nhạt hơn chút */
+        --accent-color: #fbbf24; /* Vàng kim */
+        --text-light: #f8fafc;
+        --text-gray: #cbd5e1;
+    }
+
+    body, .main-banner, .section, .subscribe {
+        background-color: var(--bg-main) !important;
+        color: var(--text-light) !important;
+    }
+
+    /* 2. HIỆU ỨNG THẺ (CARD) HIỆN ĐẠI DÀNH CHO CẢ TRÁI VÀ PHẢI */
+    .premium-card {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin-bottom: 24px;
+        background-color: var(--bg-card); /* Đề phòng ảnh lỗi thì có nền */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .premium-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Zoom ảnh mượt mà khi hover */
+    .premium-card img {
+        width: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+        display: block;
+    }
+    .premium-card:hover img {
+        transform: scale(1.08);
+    }
+
+    /* 3. GRADIENT OVERLAY - CHIẾC CHÌA KHÓA CHO GIAO DIỆN ĐẸP */
+    .gradient-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* Chuyển từ mờ trong suốt ở trên xuống xanh navy đậm ở dưới */
+        background: linear-gradient(to top, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.8) 40%, transparent 100%);
+        padding: 30px 25px 20px 25px;
+        z-index: 2;
+        pointer-events: none; /* Để hover không bị lỗi */
+    }
+
+    .premium-card .content-text {
+        position: absolute;
+        bottom: 20px;
+        left: 25px;
+        right: 25px;
+        z-index: 3;
+    }
+
+    /* 4. TYPOGRAPHY (FONT CHỮ) */
+    .banner-title {
+        color: var(--accent-color) !important;
+        font-weight: 800;
+        font-size: 2.2rem;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+    
+    .banner-desc {
+        color: var(--text-light) !important;
+        font-size: 1.1rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* Tiêu đề section */
+    .section-heading h2 {
+        color: var(--accent-color) !important;
+        font-weight: 800;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+    .section-heading h2::after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 3px;
+        background-color: var(--accent-color);
+        bottom: 0;
+        left: 0;
+        border-radius: 5px;
+    }
+
+    /* Nút bấm nổi bật (Glow effect) */
+    .btn-glow {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 30px;
+        color: var(--bg-main);
+        background-color: var(--accent-color);
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        pointer-events: auto; /* Kích hoạt lại click do overlay bị vô hiệu hóa */
+    }
+    .btn-glow:hover {
+        background-color: #f59e0b;
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+        transform: scale(1.05);
+    }
+
+    /* Định dạng cho Partial View (Cột bên phải) */
+    /* Mặc định style này sẽ ghi đè lên các thẻ bên trong Partial View để đồng bộ UI */
+    .right-content .row > div {
+        margin-bottom: 15px;
+    }
+    .right-content .premium-card img {
+        height: 230px; /* Cố định chiều cao thẻ nhỏ cho đều */
+    }
+    .right-content .banner-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    .right-content .banner-desc {
+        font-size: 0.85rem;
+        color: var(--text-gray) !important;
+    }
+
+    /* Nút Submit cuối trang */
+    .main-dark-button {
+        background-color: var(--accent-color);
+        color: var(--bg-main);
+        border: none;
+        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+        min-height: 50px;
+        font-weight: 800;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .main-dark-button:hover {
+        background-color: #f59e0b;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="main-banner mt-4" id="top">
+    <div class="container-fluid px-4">
+        <div class="row">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="premium-card h-100" style="min-height: 500px;">
+    <img class="img-cover" style="height: 100%;" src="https://media-cdn-v2.laodong.vn/storage/newsportal/2022/9/11/1091740/28651-Dong-Bao-Khmer.jpg?w=800&crop=auto&scale=both" alt="Banner Lễ Hội" />
+    
+    <div class="gradient-overlay" style="height: 70%;"></div>
+    
+    <div class="content-text">
+        <h4 class="banner-title">NHỮNG LỄ HỘI TRUYỀN THỐNG ĐẶC SẮC CỦA NGƯỜI KHMER</h4>
+        <p class="banner-desc mb-3">Lễ hội Ok Om Bok - Nét văn hóa tâm linh độc đáo của đồng bào Khmer Trà Vinh</p>
+        <a https://localhost:44330/Common/BaiViet/XemChiTiet?iMaBaiViet=35>Xem Thêm</a>
+    </div>
+</div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="right-content h-100">
+                    <div class="row h-100">
+                        @Html.Action("BaiVietMoi_Par", "Partialview")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="section mt-5 pt-4" id="men">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="section-heading">
+                    <h2>CÁC LỄ HỘI ĐẶC SẮC</h2>
+                    <span class="mt-2 block" style="color: var(--text-gray);">Không gian lễ hội truyền thống của đồng bào Khmer Nam Bộ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="men-item-carousel">
+                    <div class="owl-men-item owl-carousel">
+                        @* Thêm các ảnh custom đẹp vào slide *@
+                        <div class="item premium-card">
+                            <img src="https://files.bdttg.gov.vn/ContentFolder/ecm/source_files/2017/11/13/10301359_khomer_1_17-11-13.jpg" alt="Đua Ghe Ngo" style="height: 300px;">
+                            <div class="gradient-overlay" style="height: 60%;"></div>
+                            <div class="content-text">
+                                <h4 class="banner-title" style="font-size: 1.2rem;">ĐUA GHE NGO</h4>
+                            </div>
+                        </div>
+                        <div class="item premium-card">
+                            <img src="https://cly.1cdn.vn/2023/11/12/anh-2.jpg" alt="Văn hóa múa Rom Vong" style="height: 300px;">
+                            <div class="gradient-overlay" style="height: 60%;"></div>
+                            <div class="content-text">
+                                <h4 class="banner-title" style="font-size: 1.2rem;">MÚA ROM VONG</h4>
+                            </div>
+                        </div>
+                        
+                        @* List bài viết từ DB *@
+                        @foreach (var item in listBaiVietNoiBat)
+                        {
+                            <div class="item premium-card">
+                                <img src="~/Assets/images/@item.AnhBia" alt="@item.TenBaiViet" style="height: 300px;">
+                                <div class="gradient-overlay" style="height: 60%;"></div>
+                                <div class="content-text">
+                                    <h4 class="banner-title" style="font-size: 1.2rem;">@item.TenBaiViet</h4>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section mt-5" id="women">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="section-heading">
+                    <h2>VĂN HÓA NGƯỜI KHMER</h2>
+                    <span class="mt-2 block" style="color: var(--text-gray);">Tìm hiểu về phong tục, tín ngưỡng và văn hóa Khmer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="women-item-carousel">
+                    <div class="owl-women-item owl-carousel">
+                        <div class="item premium-card">
+                            <img src="https://images.vietnamtourism.gov.vn/vn//images/2024/thang_4/1504.lang_du_lich_khedol_2.jpg" alt="Kiến trúc chùa Khmer" style="height: 300px;">
+                            <div class="gradient-overlay" style="height: 60%;"></div>
+                            <div class="content-text">
+                                <h4 class="banner-title" style="font-size: 1.2rem;">KIẾN TRÚC CHÙA ĐỘC ĐÁO</h4>
+                            </div>
+                        </div>
+                        <div class="item premium-card">
+                            <img src="https://media-cdn-v2.laodong.vn/storage/newsportal/2022/9/11/1091740/28651-Dong-Bao-Khmer.jpg?w=800&crop=auto&scale=both" alt="Cộng đồng Khmer" style="height: 300px;">
+                            <div class="gradient-overlay" style="height: 60%;"></div>
+                            <div class="content-text">
+                                <h4 class="banner-title" style="font-size: 1.2rem;">CỘNG ĐỒNG ĐOÀN KẾT</h4>
+                            </div>
+                        </div>
+
+                        @foreach (var item in listBaiViet)
+                        {
+                            <div class="item premium-card">
+                                <img src="~/Assets/images/@item.AnhBia" alt="@item.TenBaiViet" style="height: 300px;">
+                                <div class="gradient-overlay" style="height: 60%;"></div>
+                                <div class="content-text">
+                                    <h4 class="banner-title" style="font-size: 1.2rem;">@item.TenBaiViet</h4>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section mt-5" id="explore">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5">
+                <div class="left-content pe-lg-4">
+                    <div class="section-heading">
+                        <h2>Lễ hội Ok Om Bok</h2>
+                    </div>
+                    <p class="mt-4" style="color: var(--text-light); font-size: 1.1rem; line-height: 1.7;">
+                        Lễ hội Ok Om Bok là một trong ba lễ hội lớn nhất của người Khmer Nam Bộ, tổ chức vào rằm tháng 10 âm lịch để tạ ơn mặt trăng sau mùa vụ.
+                    </p>
+                    <div class="quote mt-4 mb-4" style="border-left: 4px solid var(--accent-color); background-color: var(--bg-card); padding: 20px; border-radius: 0 12px 12px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                        <i class="fa fa-quote-left" style="color: var(--accent-color); font-size: 1.5rem; margin-bottom: 15px;"></i>
+                        <p class="fst-italic m-0" style="color: var(--text-light);">Không chỉ là dịp để cầu mùa màng, lễ hội còn thể hiện sự gắn bó của người Khmer với thiên nhiên và tín ngưỡng truyền thống.</p>
+                    </div>
+                    <p style="color: var(--text-gray);">
+                        Điểm nhấn trong lễ hội là lễ cúng trăng và đua ghe ngo, thu hút hàng ngàn người dân và du khách về tham dự tại các tỉnh như Trà Vinh, Sóc Trăng, Bạc Liêu...
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="right-content">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="premium-card mb-0"><img style="height: 220px;" src="~/Assets/images/kh.jpg" alt=""></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="premium-card mb-0"><img style="height: 220px;" src="~/Assets/images/kh1.jpg" alt=""></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="premium-card mb-0"><img style="height: 220px;" src="~/Assets/images/kh2.jpg" alt=""></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="premium-card mb-0"><img style="height: 220px;" src="~/Assets/images/kh3.jpg" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="subscribe mt-5 py-5" style="background-color: #0b1120 !important; border-top: 1px solid rgba(255,255,255,0.05);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="section-heading mb-4">
+                    <h2 style="color: var(--text-light) !important;">Nhận thông báo bài viết mới</h2>
+                    <span style="color: var(--text-gray); display: block; margin-top: 10px;">Nhập địa chỉ Email của bạn. Hệ thống sẽ gửi thông báo khi có bài viết sự kiện mới nhất.</span>
+                </div>
+                <form id="subscribe" action="" method="get">
+                    <div class="row g-3">
+                        <div class="col-lg-8 col-sm-8">
+                            <input name="name" type="email" id="name" class="form-control" placeholder="Nhập địa chỉ Email của bạn..." required="" style="background-color: var(--bg-card); color: var(--text-light); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; height: 50px;">
+                        </div>
+                        <div class="col-lg-4 col-sm-4">
+                            <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane me-2"></i> Đăng Ký</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <div class="row" style="color: var(--text-gray);">
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><strong style="color: var(--accent-color);">Địa chỉ:</strong><br><span>Xã Tân Thạnh, TP Cần Thơ</span></li>
+                            <li><strong style="color: var(--accent-color);">Điện thoại:</strong><br><span>0294 3 822 999</span></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><strong style="color: var(--accent-color);">Giờ làm việc:</strong><br><span>07:30 AM - 17:30</span></li>
+                            <li><strong style="color: var(--accent-color);">Email:</strong><br><span>lienhe@lehoikhmer.com</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
