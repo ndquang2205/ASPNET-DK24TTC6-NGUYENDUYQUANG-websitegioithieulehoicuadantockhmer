@@ -1,4 +1,4 @@
-# [cite_start]XÂY DỰNG WEBSITE GIỚI THIỆU CÁC LỄ HỘI CỦA NGƯỜI DÂN TỘC KHMER [cite: 4]
+# XÂY DỰNG WEBSITE GIỚI THIỆU CÁC LỄ HỘI CỦA NGƯỜI DÂN TỘC KHMER 
 
 ## Thông tin sinh viên
 
